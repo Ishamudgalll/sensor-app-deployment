@@ -1,9 +1,4 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Thu May 14 17:09:31 2020
 
-@author: LENOVO
-"""
 
 import requests
 
