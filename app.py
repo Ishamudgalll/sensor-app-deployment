@@ -1,29 +1,33 @@
 import numpy as np
-from flask import Flask, request, jsonify, render_template
 import pickle
+import math
 
-app = Flask(__name__)
-model = pickle.load(open('finalized_model2.pkl', 'rb'))
+from flask import Flask, jsonify, request 
+
+
+app = Flask(__name__) 
+model = pickle.load(open('final_model_v3.pkl', 'rb'))
 
 @app.route('/')
-def home():
-    return render_template('index.html')
+def home(): 
+	
+		return jsonify({"message" : "Hi! there"}) 
 
-@app.route('/predict',methods=['POST'])
+
+@app.route('/home/predict', methods = ['POST']) 
 def predict():
-    '''
-    For rendering results on HTML GUI
-    '''
-    int_features = [float(x) for x in request.form.values()]
-    final_features = [np.array(int_features)]
-    prediction = model.predict(final_features)
+	
+    data = request.get_json(force=True)
+    json = list(data.values())
+    prediction = model.predict([np.array(json)])
 
-    output = round(prediction[0], 2)
+    output = prediction[0]
+    dic = {}
+    dic["key"] = output
+    return jsonify(dic)
 
-    return render_template('index.html', prediction_text='{}'.format(output))
+ 
+if __name__ == '__main__': 
 
-
-if __name__ == "__main__":
-    app.run(debug=True)
-  
+	app.run(debug = True)  
 
